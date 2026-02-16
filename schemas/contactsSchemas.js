@@ -16,14 +16,26 @@ export const createContactSchema = Joi.object({
         'string.base': 'contacts phone must be string',
         'string.empty': 'contact phone cannot be empty',
     }),
+    favorite: Joi.boolean().messages({
+        'boolean.base': 'contacts favorite must be boolean',
+    }),
 });
 
 export const updateContactSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
     phone: Joi.string(),
+    favorite: Joi.boolean(),
 })
     .min(1)
     .messages({
         'object.min': 'Body must have at least one field',
     });
+
+export const updateFavoriteContactSchema = Joi.object({
+    favorite: Joi.boolean().required().messages({
+        'any.required': 'contact favorite must be exist!',
+        'boolean.base': 'contacts favorite must be boolean',
+        'boolean.empty': 'contact favorite cannot be empty',
+    }),
+});

@@ -1,47 +1,29 @@
-import fs from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { nanoid } from 'nanoid';
+import Contact from '../db/models/Contact.js';
 
-const contactsPath = resolve('db', 'contacts.json');
+export const listContacts = () => Contact.findAll();
 
-const updateContacts = contacts => fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+export const getContactById = id => Contact.findByPk(id);
 
-export const listContacts = async () => {
-    const contacts = await fs.readFile(contactsPath, 'utf-8');
-    return JSON.parse(contacts);
-};
-
-export const getContactById = async id => {
-    const contacts = await listContacts();
-    const contact = contacts.find(item => item.id === id);
-    return contact || null;
-};
-
-export const addContact = async data => {
-    const contacts = await listContacts();
-    const newContact = {
-        id: nanoid(),
-        ...data,
-    };
-    contacts.push(newContact);
-    await updateContacts(contacts);
-    return newContact;
-};
+export const addContact = data => Contact.create(data);
 
 export const updateContact = async (id, data) => {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(item => item.id === id);
-    if (index === -1) return null;
-    contacts[index] = { ...contacts[index], ...data };
-    await updateContacts(contacts);
-    return contacts[index];
+    const contact = await getContactById(id);
+    if (!contact) return null;
+    await contact.update(data);
+    return contact;
+};
+
+export const updateStatus = async (id, { favorite }) => {
+    const contact = await getContactById(id);
+    if (!contact) return null;
+    contact.favorite = favorite;
+    await contact.save();
+    return contact;
 };
 
 export const removeContact = async id => {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(contact => contact.id === id);
-    if (index === -1) return null;
-    const [result] = contacts.splice(index, 1);
-    await updateContacts(contacts);
-    return result;
+    const contact = await getContactById(id);
+    if (!contact) return null;
+    contact.destroy();
+    return contact;
 };

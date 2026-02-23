@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize.js';
+import { emailRegex } from '../../constants/authConstants.js';
 
 const Contact = sequelize.define('contact', {
     name: {
@@ -9,6 +10,9 @@ const Contact = sequelize.define('contact', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            is: emailRegex,
+        },
     },
     phone: {
         type: DataTypes.STRING,
@@ -17,6 +21,16 @@ const Contact = sequelize.define('contact', {
     favorite: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+    },
+    owner: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'users',
+            key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
     },
 });
 

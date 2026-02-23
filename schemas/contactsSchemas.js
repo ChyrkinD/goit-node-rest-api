@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+// shemas for BODY validation
 export const createContactSchema = Joi.object({
     name: Joi.string().required().messages({
         'any.required': 'contact name must be exist!',
@@ -37,5 +38,21 @@ export const updateFavoriteContactSchema = Joi.object({
         'any.required': 'contact favorite must be exist!',
         'boolean.base': 'contacts favorite must be boolean',
         'boolean.empty': 'contact favorite cannot be empty',
+    }),
+});
+
+// shemas for QUERY validation
+export const getContactsSchema = Joi.object({
+    limit: Joi.number().min(1).messages({
+        'number.base': 'limit must be number',
+        'number.min': 'limit must be greater then 0',
+    }),
+    offset: Joi.number().min(0).messages({
+        'number.base': 'offset must be number',
+        'number.min': 'offset must be 0 or greater ',
+    }),
+    favorite: Joi.valid('true', 'false').messages({
+        'string.empty': 'favorite cannot be empty',
+        'any:only': 'favorite must be "true" or "false"',
     }),
 });

@@ -1,11 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import 'dotenv/config';
 
 import contactsRouter from './routes/contactsRouter.js';
 import authRouter from './routes/authRouter.js';
-import { db_connection } from './db/db_connection.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -22,8 +20,4 @@ app.use('/api/contacts', contactsRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-await db_connection();
-
-app.listen(3000, () => {
-    console.log('Server is running. Use our API on port: 3000');
-});
+export default app;

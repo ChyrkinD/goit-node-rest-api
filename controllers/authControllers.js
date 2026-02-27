@@ -30,3 +30,10 @@ export const logoutController = async (req, res) => {
     const user = await authServices.logoutUser(req.user);
     res.status(204).send();
 };
+
+export const changeAvatarController = async (req, res) => {
+    const user = await authServices.changeAvatar(req.user, req.file);
+    res.json({
+        avatarURL: user.avatarURL,
+    });
+};

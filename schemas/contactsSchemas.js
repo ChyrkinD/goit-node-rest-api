@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { emailRegex } from '../constants/authConstants.js';
 
 // shemas for BODY validation
 export const createContactSchema = Joi.object({
@@ -7,7 +8,7 @@ export const createContactSchema = Joi.object({
         'string.base': 'contacts name must be string',
         'string.empty': 'contact name cannot be empty',
     }),
-    email: Joi.string().required().messages({
+    email: Joi.string().regex(emailRegex).required().messages({
         'any.required': 'contact email must be exist!',
         'string.base': 'contacts email must be string',
         'string.empty': 'contact email cannot be empty',
@@ -24,7 +25,7 @@ export const createContactSchema = Joi.object({
 
 export const updateContactSchema = Joi.object({
     name: Joi.string(),
-    email: Joi.string(),
+    email: Joi.string().regex(emailRegex),
     phone: Joi.string(),
     favorite: Joi.boolean(),
 })

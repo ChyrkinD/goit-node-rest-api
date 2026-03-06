@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import {
     registerController,
+    verifyEmailController,
+    resendVerificationController,
     loginController,
     currentController,
     logoutController,
@@ -9,7 +11,7 @@ import {
 } from '../controllers/authControllers.js';
 import { changeSubscriptionController } from '../controllers/userController.js';
 import validateBody from '../helpers/validateBody.js';
-import { authLoginSchema, authRegisterSchema } from '../schemas/authSchemas.js';
+import { authLoginSchema, authRegisterSchema, emailSchema } from '../schemas/authSchemas.js';
 import { subscriptionUpdateSchema } from '../schemas/usersSchemas.js';
 import authenticate from '../middlewares/authenticate.js';
 import upload from '../middlewares/upload.js';
@@ -17,6 +19,10 @@ import upload from '../middlewares/upload.js';
 const authRouter = new Router();
 
 authRouter.post('/register', validateBody(authRegisterSchema), registerController);
+
+authRouter.get('/verify/:verificationToken', verifyEmailController);
+
+authRouter.post('/verify', validateBody(emailSchema), resendVerificationController);
 
 authRouter.post('/login', validateBody(authLoginSchema), loginController);
 

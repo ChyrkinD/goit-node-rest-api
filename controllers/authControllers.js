@@ -10,6 +10,20 @@ export const registerController = async (req, res) => {
     });
 };
 
+export const verifyEmailController = async (req, res) => {
+    await authServices.veriftEmail(req.params);
+    res.json({
+        message: 'Verification successful',
+    });
+};
+
+export const resendVerificationController = async (req, res) => {
+    const user = await authServices.resendVerification(req.body);
+    res.json({
+        massage: 'Verification email sent',
+    });
+};
+
 export const loginController = async (req, res) => {
     const user = await authServices.loginUser(req.body);
     res.json({

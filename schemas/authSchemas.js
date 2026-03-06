@@ -28,3 +28,12 @@ export const authLoginSchema = Joi.object({
         'string.empty': 'user password cannot be empty',
     }),
 });
+
+export const emailSchema = Joi.object({
+    email: Joi.string().regex(emailRegex).required().messages({
+        'any.required': 'user email must be exist!',
+        'string.base': 'user email must be string',
+        'string.pattern.base': 'user email must contain "@"',
+        'string.empty': 'user email cannot be empty',
+    }),
+});
